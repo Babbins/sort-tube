@@ -1,6 +1,7 @@
 <template>
   <header>
     <img id="logo" src="../assets/logo.png" alt="Sort Tube Logo" >
+    <Search />
   </header>
 </template>
 

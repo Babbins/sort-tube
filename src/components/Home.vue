@@ -1,14 +1,16 @@
 <template>
-  <header>
-    {{ getData() }}
-  </header>
+  <div class="container">
+    <Search @getData="getData"/>
+    <VideoList :videos="videos" />
+  </div>
 </template>
 
 <script>
+import Search from './Search'
+import VideoList from './VideoList'
 import axios from 'axios'
 import {apiKey} from '../secrets.json'
-
-var apiURL = `https://www.googleapis.com/youtube/v3/search`
+const apiURL = `https://www.googleapis.com/youtube/v3/search`
 
 export default {
   name: 'Home',
@@ -18,20 +20,25 @@ export default {
     }
   },
   methods: {
-    getData: function () {
+
+    getData (query) {
+      const self = this
       axios.get(apiURL, {
         params: {
+          q: query.term,
           key: apiKey,
           part: 'snippet',
-          order: 'viewCount',
-          publishedAfter: '2017-10-15T20:19:55.413Z'
+          order: query.order,
+          publishedAfter: query.uploadDate
         }
       })
       .then(function (response) {
+        self.videos = response.data.items
         console.log(response)
       })
     }
-  }
+  },
+  components: { Search, VideoList }
 }
 </script>
 
